@@ -26,9 +26,9 @@ import model.listini.Convention;
 import org.apache.commons.lang.time.DateUtils;
 
 public class Booking implements Serializable{
-	
+
 	private Integer id;
-	
+
 	private Guest booker;
 	private Booker aBooker;
 	private Integer nrGuests = 1;
@@ -38,6 +38,7 @@ public class Booking implements Serializable{
 	private Double roomSubtotal = 0.0;
 	private Double extraSubtotal = 0.0;
 	private String notes;
+	private Integer receipt;
 	private List<Extra> extras;
 	private List<Adjustment> adjustments;
 	private List<Payment> payments = null;
@@ -49,32 +50,32 @@ public class Booking implements Serializable{
 	private Integer id_structure = null;
 	private Integer id_convention = null;
 	private Integer id_room = null;
-	
+
 	private List<Housed> housedList;
 	private Housed groupLeader;
 	private GroupLeader aGroupLeader;
-	
-	
+
+
 	public Booking(){
 		this.extras = new ArrayList<Extra>();
 		this.adjustments = new ArrayList<Adjustment>();
 		this.payments = new ArrayList<Payment>();
 		this.guests = new ArrayList<Guest>();
 		this.extraItems = new ArrayList<ExtraItem>();
-		this.housedList = new ArrayList<Housed>();	
+		this.housedList = new ArrayList<Housed>();
 	}
-	
+
 	public Integer calculateNumNights(){
-		Long millis; 
+		Long millis;
 		Integer days = 0;
-		
+
 		if((this.getDateOut()!=null) && (this.getDateIn()!=null)){
 			millis = this.getDateOut().getTime() - this.getDateIn().getTime();
 			days = (int) (millis/(1000*3600*24));
-		}		
+		}
 		return days;
 	}
-	
+
 	public Boolean checkDates() {
 		Boolean ret = true;
 
@@ -84,28 +85,28 @@ public class Booking implements Serializable{
 		}
 		return ret;
 	}
-	
+
 	public Double calculateAdjustmentsSubtotal(){
 		Double ret = 0.0;
-		
+
 		for(Adjustment each: this.getAdjustments()){
 			ret = ret + each.getAmount();
 		}
 		return ret;
 	}
-	
+
 	public Double calculatePaymentsSubtotal(){
 		Double ret = 0.0;
-		
+
 		for(Payment each: this.getPayments()){
 			ret = ret + each.getAmount();
 		}
 		return ret;
 	}
-	
+
 	public ExtraItem findExtraItem(Extra extra){
 		ExtraItem ret = null;
-		
+
 		for(ExtraItem each: this.getExtraItems()){
 			if(each.getExtra().equals(extra)){
 				each.setExtra(extra);
@@ -114,13 +115,13 @@ public class Booking implements Serializable{
 		}
 		return ret;
 	}
-	
+
 	public Integer calculateExtraItemMaxQuantity(Extra extra) {
 		Integer ret = 0;
 		Integer numNights = 0;
-		
+
 		numNights = this.calculateNumNights();
-		System.out.println(extra.getTimePriceType());	
+		System.out.println(extra.getTimePriceType());
 		if (extra.getTimePriceType().equals("extraPerNight")) {
 			if (extra.getResourcePriceType().equals("extraPerRoom")) {
 				ret = numNights;
@@ -142,54 +143,54 @@ public class Booking implements Serializable{
 			else ret = 10; //per Item
 		}
 		return ret;
-	}	
-	
+	}
+
 	public List<Date> calculateBookingDates(){	//Creates an array of dates, related with the stay
-		List<Date> bookingDates = null; 
+		List<Date> bookingDates = null;
 		Date current = null;
 		Integer i = 0;
-		
+
 		bookingDates = new ArrayList<Date>();
 		if(this.getDateIn()!=null && this.getDateOut()!=null){
-			current  = DateUtils.addDays(this.getDateIn(), i );		
+			current  = DateUtils.addDays(this.getDateIn(), i );
 			while(DateUtils.truncatedCompareTo(current, this.getDateOut(),Calendar.DAY_OF_MONTH ) < 0){
 				bookingDates.add(current);
 				i = i + 1;
 				current  = DateUtils.addDays(this.getDateIn(), i );
-			}	
-		}	
-		
+			}
+		}
+
 		return bookingDates;
 	}
-	
+
 	public Double calculateExtraSubtotalForBooking(){
 		Double ret = 0.0;
-		
+
 		for (ExtraItem eachItem : this.getExtraItems()) {
 				ret = ret + eachItem.getSubtotal();
 			  }
 		return ret;
 	}
-	
+
 	public void updateExtraSubtotal(){
 		Double extraSubtotal = 0.0;
-		
+
 		for (ExtraItem each : this.getExtraItems()) {
 			extraSubtotal = extraSubtotal + each.getSubtotal();
 		}
 		this.setExtraSubtotal(extraSubtotal);
 	}
-	
+
 	public List<Integer> calculateExtraIds(){
 		List<Integer> ret = null;
-		
+
 		ret = new ArrayList<Integer>();
 		for(ExtraItem each: this.getExtraItems()){
 			ret.add(each.getId_extra());
 		}
 		return ret;
 	}
-	
+
 	public Boolean addExtra(Extra anExtra){
 		return this.getExtras().add(anExtra);
 	}
@@ -297,6 +298,12 @@ public class Booking implements Serializable{
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+	public Integer getReceipt() {
+		return receipt;
+	}
+	public void setReceipt(Integer receipt) {
+		this.receipt = receipt;
+	}
 	public List<Extra> getExtras() {
 		return extras;
 	}
@@ -395,5 +402,5 @@ public class Booking implements Serializable{
 	public void setaGroupLeader(GroupLeader aGroupLeader) {
 		this.aGroupLeader = aGroupLeader;
 	}
-	
+
 }
