@@ -37,7 +37,7 @@ In case of controversy the competent court is the Court of Cagliari (Italy).
     </select>
 
     <sql id="selectBooking">
-        select id,nrGuests,dateIn,dateOut,roomSubtotal,extraSubtotal,notes,status,id_convention,id_room,id_structure from booking
+        select id,nrGuests,dateIn,dateOut,roomSubtotal,extraSubtotal,notes,receipt,status,id_convention,id_room,id_structure from booking
     </sql>
 
     <select id="countBookingsByIdConvention" parameterType="int" resultType="int">
@@ -61,7 +61,7 @@ In case of controversy the competent court is the Court of Cagliari (Italy).
     </select>
 
     <insert id="insertBooking" parameterType="model.Booking" useGeneratedKeys="true" keyProperty="id">
-        insert into booking(nrGuests,dateIn,dateOut,roomSubtotal,extraSubtotal,notes,status,id_convention,id_room,id_structure)
+        insert into booking(nrGuests,dateIn,dateOut,roomSubtotal,extraSubtotal,notes,receipt,status,id_convention,id_room,id_structure)
         values(#{nrGuests},#{dateIn},#{dateOut},#{roomSubtotal},#{extraSubtotal},#{notes},#{receipt},#{status},#{id_convention},#{id_room},#{id_structure})
     </insert>
 

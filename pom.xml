@@ -5,9 +5,12 @@
 	<artifactId>locanda</artifactId>
 	<version>0.4</version>
 
+
 	<properties>
-		<resource.folder>${project.build.directory}/${project.name}_resources</resource.folder>
-		<db.folder>${project.build.directory}/${project.name}_resources/h2</db.folder>
+        <!-- <resource.folder>${project.build.directory}/${project.name}_resources</resource.folder> 		-->		
+		<resource.folder>c:/locanda/tomcat/${project.name}_resources</resource.folder>
+		<!-- <db.folder>${project.build.directory}/${project.name}_resources/h2</db.folder> -->
+		<db.folder>c:/locanda/tomcat/bin/h2</db.folder>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -33,7 +36,8 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		<directory>${basedir}/${project.name}_target</directory>
+		<!-- <directory>${basedir}/${project.name}_target</directory> -->
+		<directory>c:/locanda/tomcat/webapps</directory>
 		<finalName>${project.name}</finalName>
 		<filters>
 			<filter>global.properties</filter>
@@ -48,7 +52,8 @@
 			</resource>
 			<resource>
 				<directory>${basedir}/solr</directory>
-				<targetPath>${resource.folder}/solr</targetPath>
+				<!-- <targetPath>${resource.folder}/solr</targetPath> -->
+				<targetPath>c:/locanda/tomcat/bin/solr</targetPath>
 			</resource>
 			<resource>
 				<directory>${basedir}/h2</directory>
