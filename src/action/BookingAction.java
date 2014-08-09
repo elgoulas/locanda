@@ -62,7 +62,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage( value="default")
 @InterceptorRefs({
-	@InterceptorRef("userAwareStack")    
+	@InterceptorRef("userAwareStack")
 })
 @Result(name="notLogged", location="/WEB-INF/jsp/homeNotLogged.jsp")
 public class BookingAction extends ActionSupport implements SessionAware,UserAware{
@@ -103,9 +103,9 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 	private HousedService housedService = null;
 	@Autowired
 	private CreditCardService creditCardService = null;
-	
+
 	private static Logger logger = Logger.getLogger(Logger.class);
-	
+
 	@Actions({
 		@Action(
 				value="/updateBookingDates",results = {
@@ -117,34 +117,34 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				}),
 				@Result(name="input", location = "/WEB-INF/jsp/validationError.jsp")
 		})
-	})	
+	})
 	public String updateBookingDates() {
 		Integer numNights;
 		Booking booking = null;
-		
+
 		if(!this.checkBookingDates(this.getIdStructure())){
 			return ERROR;
-		}		
-		booking  = (Booking) this.getSession().get("booking");		
+		}
+		booking  = (Booking) this.getSession().get("booking");
 		booking.setDateIn(this.getBooking().getDateIn());
 		booking.setDateOut(this.getBooking().getDateOut());
-		
-		this.updateRoomSubtotal(booking);		
+
+		this.updateRoomSubtotal(booking);
 		this.updateUnitaryPriceInBookedExtraItems(booking);
 		this.updateMaxQuantityInBookedExtraItems(booking);
 		this.updateQuantityInBookedExtraItems(booking);
 		booking.updateExtraSubtotal();
-		
-		this.setBooking(booking);	
-		
+
+		this.setBooking(booking);
+
 		numNights = booking.calculateNumNights();
 		this.setNumNights(numNights);
-		
+
 		this.getMessage().setResult(Message.SUCCESS);
 		this.getMessage().setDescription(getText("calculatedPriceAction"));
-		return "success";						
+		return "success";
 	}
-	
+
 	@Actions({
 		@Action(value="/updateRoom",results = {
 				@Result(type ="json",name="success", params={
@@ -155,26 +155,26 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				}),
 				@Result(name="input", location = "/WEB-INF/jsp/validationError.jsp")
 		})
-	})	
+	})
 	public String updateRoom() {
 		Integer numGuests;
-		Booking booking = null;			
+		Booking booking = null;
 		RoomType newRoomType = null;
 		RoomType oldRoomType = null;
-		
+
 		if(!this.checkBookingDates(this.getIdStructure())){
 			return ERROR;
-		}		
-				
-		booking  = (Booking) this.getSession().get("booking");		
+		}
+
+		booking  = (Booking) this.getSession().get("booking");
 		if(booking.getRoom()!=null){
 			oldRoomType = booking.getRoom().getRoomType();
-		}		
-		this.updateRoom(booking);	
-		
+		}
+		this.updateRoom(booking);
+
 		if(booking.getRoom()!=null){
 			newRoomType = booking.getRoom().getRoomType();
-		}		
+		}
 		//If the Room Type changes, prices must be updated
 		if((oldRoomType!= null) && (newRoomType!= null) && !(oldRoomType.equals(newRoomType) )){
 			numGuests = booking.getNrGuests();
@@ -183,27 +183,27 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				booking.setNrGuests(numGuests);
 				//If nrGuests changes, extra items' max quantity must be updated
 				this.updateMaxQuantityInBookedExtraItems(booking);
-			}			
-			this.updateRoomSubtotal(booking);			
+			}
+			this.updateRoomSubtotal(booking);
 			this.updateUnitaryPriceInBookedExtraItems(booking);
 			booking.updateExtraSubtotal();
 		}
 		this.setBooking(booking);
-		
+
 		this.updateListNumGuests(booking);
-		
+
 		this.getMessage().setResult(Message.SUCCESS);
 		this.getMessage().setDescription(getText("calculatedPriceAction"));
-		return "success";						
+		return "success";
 	}
-	
+
 	private void updateRoom(Booking booking){
-		Room newRoom = null; 
-		
+		Room newRoom = null;
+
 		newRoom = this.getRoomService().findRoomById(this.getBooking().getRoom().getId());
-		booking.setRoom(newRoom);	
+		booking.setRoom(newRoom);
 	}
-	
+
 	@Actions({
 		@Action(value="/updateNrGuests",results = {
 				@Result(type ="json",name="success", params={
@@ -214,27 +214,27 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				}),
 				@Result(name="input", location = "/WEB-INF/jsp/validationError.jsp")
 		})
-	})	
+	})
 	public String updateNrGuests() {
-		Booking booking = null;	
-		
+		Booking booking = null;
+
 		if(!this.checkBookingDates(this.getIdStructure())){
 			return ERROR;
-		}				
-		booking  = (Booking) this.getSession().get("booking");			
-		
+		}
+		booking  = (Booking) this.getSession().get("booking");
+
 		booking.setNrGuests(this.getBooking().getNrGuests());
 		this.updateRoomSubtotal(booking);
-		this.updateMaxQuantityInBookedExtraItems(booking);	
+		this.updateMaxQuantityInBookedExtraItems(booking);
 		this.updateQuantityInBookedExtraItems(booking);
 		booking.updateExtraSubtotal();
-		this.setBooking(booking);		
-		
+		this.setBooking(booking);
+
 		this.getMessage().setResult(Message.SUCCESS);
 		this.getMessage().setDescription(getText("calculatedPriceAction"));
-		return "success";						
+		return "success";
 	}
-	
+
 	@Actions({
 		@Action(value="/updateExtras",results = {
 				@Result(type ="json",name="success", params={
@@ -245,38 +245,38 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				}),
 				@Result(name="input", location = "/WEB-INF/jsp/validationError.jsp")
 		})
-	})	
+	})
 	public String updateExtras() {
-		Booking booking = null;	
+		Booking booking = null;
 		List<Extra> checkedExtras = null;
 		List<Integer> filteredBookingExtraIds = null;
 		Integer anInt;
-		
+
 		if(!this.checkBookingDatesNotNull(this.getIdStructure())){
 			return ERROR;
-		}					
-		booking  = (Booking) this.getSession().get("booking");			
-		
+		}
+		booking  = (Booking) this.getSession().get("booking");
+
 		filteredBookingExtraIds = new ArrayList<Integer>();
 		for(Object each: this.getBookingExtraIds()){
 			try{
 				anInt = Integer.parseInt((String)each);
 				filteredBookingExtraIds.add(anInt);
 			}catch (Exception e) {
-				
-			}			
-		}		
+
+			}
+		}
 		checkedExtras = this.getExtraService().findExtrasByIds(filteredBookingExtraIds);
-		this.updateExtraItems(booking,checkedExtras);					
-		booking.updateExtraSubtotal();	
-		
-		this.setBooking(booking);	
-		
+		this.updateExtraItems(booking,checkedExtras);
+		booking.updateExtraSubtotal();
+
+		this.setBooking(booking);
+
 		this.getMessage().setResult(Message.SUCCESS);
 		this.getMessage().setDescription(getText("calculatedPriceAction"));
-		return "success";						
+		return "success";
 	}
-	
+
 	@Actions({
 		@Action(value="/updateConvention",results = {
 				@Result(type ="json",name="success", params={
@@ -287,42 +287,42 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				}),
 				@Result(name="input", location = "/WEB-INF/jsp/validationError.jsp")
 		})
-	})	
+	})
 	public String updateConvention() {
-		Booking booking = null;			
-		
+		Booking booking = null;
+
 		if(!this.checkBookingDates(this.getIdStructure())){
 			return ERROR;
-		}			
+		}
 		booking  = (Booking) this.getSession().get("booking");
 		booking.setConvention(this.getBooking().getConvention());
-				
+
 		//If the convention changes, then room and extra prices must be updated
-		this.updateRoomSubtotal(booking);			
+		this.updateRoomSubtotal(booking);
 		this.updateUnitaryPriceInBookedExtraItems(booking);
 		booking.updateExtraSubtotal();
-		
-		this.setBooking(booking);	
-		
+
+		this.setBooking(booking);
+
 		this.getMessage().setResult(Message.SUCCESS);
 		this.getMessage().setDescription(getText("calculatedPriceAction"));
-		return "success";						
+		return "success";
 	}
-	
+
 	private void updateExtraItems(Booking booking,List<Extra> checkedExtras){
-		ExtraItem extraItem = null;		
+		ExtraItem extraItem = null;
 		List<ExtraItem> extraItems = null;
-		
-		extraItems = new ArrayList<ExtraItem>();	
+
+		extraItems = new ArrayList<ExtraItem>();
 		for(Extra each: checkedExtras){
 			extraItem = null;
 			for(ExtraItem bookedExtraItem: this.getBooking().getExtraItems()){
 				//each already exists and I have to update just the quantity reading it from the request
 				if(bookedExtraItem.getExtra().equals(each)){
-					extraItem = bookedExtraItem;	
+					extraItem = bookedExtraItem;
 					extraItem.setExtra(each);//in some cases extraItem.extra had only the id and not all the other attributes
-					extraItem.setMaxQuantity(booking.calculateExtraItemMaxQuantity(each));					
-				}				
+					extraItem.setMaxQuantity(booking.calculateExtraItemMaxQuantity(each));
+				}
 			}
 			if(extraItem == null){
 				//each is a new extra, so a new extra item must be created
@@ -333,58 +333,58 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				extraItem.setUnitaryPrice(
 						this.getStructureService().calculateExtraItemUnitaryPrice(this.getIdStructure(), booking.getDateIn(), booking.getDateOut(), booking.getRoom().getRoomType(), booking.getConvention(), each));
 			}
-			extraItems.add(extraItem);	
-		}	
-		booking.setExtraItems(extraItems);		
+			extraItems.add(extraItem);
+		}
+		booking.setExtraItems(extraItems);
 	}
-	
+
 	private void updateRoomSubtotal(Booking booking){
 		Double roomSubtotal = 0.0;
-		
+
 		roomSubtotal = this.getBookingService().calculateRoomSubtotalForBooking(this.getIdStructure(),booking);
-		booking.setRoomSubtotal(roomSubtotal);		
+		booking.setRoomSubtotal(roomSubtotal);
 	}
-	
+
 	private void updateMaxQuantityInBookedExtraItems(Booking booking){
 		Integer maxQuantity;
-		
+
 		for(ExtraItem each: booking.getExtraItems()){
 			maxQuantity = booking.calculateExtraItemMaxQuantity(each.getExtra());
 			each.setMaxQuantity(maxQuantity);
-		}		
-	}	
-	
+		}
+	}
+
 	private void updateQuantityInBookedExtraItems(Booking booking){
 		Integer maxQuantity;
-		
+
 		for(ExtraItem each: booking.getExtraItems()){
 			maxQuantity = booking.calculateExtraItemMaxQuantity(each.getExtra());
 			each.setQuantity(maxQuantity);
-		}		
+		}
 	}
-	
+
 	private void updateUnitaryPriceInBookedExtraItems(Booking booking){
 		Double unitaryPrice;
 		if((booking.getDateIn()!=null) && (booking.getDateOut()!=null)){
 			for(ExtraItem each: booking.getExtraItems()){
 				unitaryPrice = this.getStructureService().calculateExtraItemUnitaryPrice(this.getIdStructure(), booking.getDateIn(), booking.getDateOut(), booking.getRoom().getRoomType(), booking.getConvention(), each.getExtra());
 				each.setUnitaryPrice(unitaryPrice);
-			}	
-		}	
+			}
+		}
 	}
-	
+
 	@Actions({
 		@Action(value="/displayQuantitySelect",results = {
 				@Result(name="success",location="/WEB-INF/jsp/contents/extraQuantity_select.jsp")
 				})
 	})
 	public String displayQuantitySelect() {
-		
+
 		this.setExtras(this.getExtraService().findExtrasByIdStructure(this.getIdStructure()));
 		this.setBooking((Booking) this.getSession().get("booking"));
-		return SUCCESS;		
+		return SUCCESS;
 	}
-	
+
 	@Actions({
 		@Action(value="/saveUpdateBooking",results = {
 				@Result(type ="json",name="success", params={"root","message"}),
@@ -399,60 +399,61 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		Booking booking = null;
 		Convention convention = null;
 		CreditCard creditCard = null;
-		
+
 		if(!this.checkBookingDates(this.getIdStructure())){
 			return ERROR;
-		}		
-		
+		}
+
 		if(!this.checkBookingChecking()){
 			return ERROR;
-		}		
-		
+		}
+
 		booking = (Booking) this.getSession().get("booking");
-		
+
 		//Adjustments
 		this.filterAdjustments();
 		booking.setAdjustments(this.getBooking().getAdjustments());
 		//Payments
 		this.filterPayments();
 		booking.setPayments(this.getBooking().getPayments());
-		//ExtraItems: no need to filter them, because they're not updated at every updateExtras() call		
-		
+		//ExtraItems: no need to filter them, because they're not updated at every updateExtras() call
+
 		//Guests: da inserire quando ci saranno i guests
 		/*
-		this.filterGuests();	
+		this.filterGuests();
 		booking.setGuests(this.getBooking().getGuests());
 		*/
-		booker = this.getBooking().getBooker();	
+		booker = this.getBooking().getBooker();
 		if(booker.getId() == null){
 			this.getMessage().setResult(Message.ERROR);
 			this.getMessage().setDescription(getText("bookingAddErrorNoBookerAction"));
 			return ERROR;
 		}
-		
+
 		booker.setId_structure(this.getIdStructure());
 		booking.setBooker(booker);
-		
+
 		booking.setId_room(this.getBooking().getRoom().getId());
-		
+
 		convention = this.getBooking().getConvention();
 		booking.setId_convention(convention.getId());
 		booking.setNotes(this.getBooking().getNotes());
+		booking.setReceipt(this.getBooking().getReceipt());
 		creditCard = this.getBooking().getCreditCard();
 		booking.setCreditCard(creditCard);
 		logger.info("****** carta di credito " + creditCard.getCardType());
-		booking.setStatus(this.getBooking().getStatus());		
+		booking.setStatus(this.getBooking().getStatus());
 		booking.setId_structure(this.getIdStructure());
-		
+
 		this.getBookingService().saveUpdateBooking(booking);
-		
+
 		this.getSession().put("booking", booking);
 		this.getMessage().setResult(Message.SUCCESS);
 		this.getMessage().setDescription(getText("bookingAddUpdateSuccessAction"));
 		return SUCCESS;
 	}
-	
-		
+
+
 	@Actions({
 		@Action(value="/goAddBookingFromPlanner",results = {
 				@Result(name="success",location="/WEB-INF/jsp/contents/booking_form.jsp"),
@@ -466,37 +467,37 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		Double roomSubtotal = 0.0;
 		Booking booking = null;
 		CreditCard creditCard = new CreditCard();
-		
+
 		booking = new Booking();
 		this.getSession().put("booking", booking);
-		
+
 		booking.setDateIn(this.getBooking().getDateIn());
-		booking.setDateOut(this.getBooking().getDateOut());		
-		
+		booking.setDateOut(this.getBooking().getDateOut());
+
 		theBookedRoom = this.getRoomService().findRoomById(this.getBooking().getRoom().getId());
 		booking.setRoom(theBookedRoom);
 		this.updateListNumGuests(booking);
-		
+
 		defaultConvention = this.getConventionService().findConventionsByIdStructure(this.getIdStructure()).get(0);
 		booking.setConvention(defaultConvention);
-		
+
 		booking.setCreditCard(creditCard);
-		
+
 		roomSubtotal = this.getBookingService().calculateRoomSubtotalForBooking(this.getIdStructure(),booking);
 		booking.setRoomSubtotal(roomSubtotal);
-		
+
 		this.setBooking(booking);
-		
+
 		this.setRooms(this.getRoomService().findRoomsByIdStructure(this.getIdStructure()));
 		this.setExtras(this.getExtraService().findExtrasByIdStructure(this.getIdStructure()));
 		this.setConventions(this.getConventionService().findConventionsByIdStructure(this.getIdStructure()));
-				
+
 		numNights = booking.calculateNumNights();
 		this.setNumNights(numNights);
-		
+
 		return SUCCESS;
 	}
-	
+
 	@Actions({
 		@Action(value="/goAddNewBooking",results = {
 				@Result(name="success",location="/WEB-INF/jsp/booking.jsp")
@@ -506,24 +507,24 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		Convention defaultConvention = null;
 		Booking booking = null;
 		CreditCard creditCard = new CreditCard();
-				
+
 		booking = new Booking();
 		this.getSession().put("booking", booking);
-						
+
 		defaultConvention = this.getConventionService().findConventionsByIdStructure(this.getIdStructure()).get(0);
-		booking.setConvention(defaultConvention);	
+		booking.setConvention(defaultConvention);
 		booking.setCreditCard(creditCard);
-		
+
 		this.setBooking(booking);
-		
+
 		this.setRooms(this.getRoomService().findRoomsByIdStructure(this.getIdStructure()));
 		this.setExtras(this.getExtraService().findExtrasByIdStructure(this.getIdStructure()));
 		this.setConventions(this.getConventionService().findConventionsByIdStructure(this.getIdStructure()));
 		this.setListNumGuests(new ArrayList<Integer>());
-			
+
 		return SUCCESS;
 	}
-	
+
 	@Actions({
 		@Action(value="/goAddNewBookingFromGuest",results = {
 				@Result(name="success",location="/WEB-INF/jsp/booking.jsp")
@@ -532,27 +533,27 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 	public String goAddNewBookingFromGuest() {
 		Convention defaultConvention = null;
 		Booking booking = null;
-		Guest booker = null;		
+		Guest booker = null;
 		booking = new Booking();
 		this.getSession().put("booking", booking);
-						
+
 		defaultConvention = this.getConventionService().findConventionsByIdStructure(this.getIdStructure()).get(0);
 		booking.setConvention(defaultConvention);
-		
+
 		//booker settings..
 		booker = this.getGuestService().findGuestById(this.getId());
 		booking.setBooker(booker);
-		
+
 		this.setBooking(booking);
-		
+
 		this.setRooms(this.getRoomService().findRoomsByIdStructure(this.getIdStructure()));
 		this.setExtras(this.getExtraService().findExtrasByIdStructure(this.getIdStructure()));
 		this.setConventions(this.getConventionService().findConventionsByIdStructure(this.getIdStructure()));
 		this.setListNumGuests(new ArrayList<Integer>());
-			
+
 		return SUCCESS;
 	}
-	
+
 	@Actions({
 		@Action(value="/goUpdateBooking",results = {
 				@Result(name="success",location="/WEB-INF/jsp/booking.jsp")
@@ -566,47 +567,47 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		Integer numNights = 0;
 		Double adjustmentsSubtotal = 0.0;
 		Double paymentsSubtotal = 0.0;
-		
+
 		booking = this.getBookingService().findBookingById(this.getId());
 		this.getSession().put("booking", booking);
 		this.setBooking(booking);
-		
+
 		this.setRooms(this.getRoomService().findRoomsByIdStructure(this.getIdStructure()));
 		this.setExtras(this.getExtraService().findExtrasByIdStructure(this.getIdStructure()));
 		this.setBookingExtraIds(booking.calculateExtraIds());
-		this.setConventions(this.getConventionService().findConventionsByIdStructure(this.getIdStructure()));		
-		
+		this.setConventions(this.getConventionService().findConventionsByIdStructure(this.getIdStructure()));
+
 		numNights = this.getBooking().calculateNumNights();
 		this.setNumNights(numNights);
-		
+
 		adjustmentsSubtotal = this.getBooking().calculateAdjustmentsSubtotal();
 		this.setAdjustmentsSubtotal(adjustmentsSubtotal);
-		
+
 		paymentsSubtotal = this.getBooking().calculatePaymentsSubtotal();
-		this.setPaymentsSubtotal(paymentsSubtotal);		
-			
+		this.setPaymentsSubtotal(paymentsSubtotal);
+
 		this.updateListNumGuests(booking);
 		return SUCCESS;
 	}
-	
+
 	@Actions({
 		@Action(value="/findAllBookingsJson",results = {
 				@Result(type ="json",name="success", params={"root","bookings"})
-		}) 
+		})
 	})
 	public String findAllBookings(){
-		
+
 		this.setBookings(this.getBookingService().findBookingsByIdStructure(this.getIdStructure()));
-		return SUCCESS;		
-	}	
-	
+		return SUCCESS;
+	}
+
 	@Actions({
 		@Action(value="/findAllBookingsByStartDateAndLengthOfStay",results = {
 				@Result(type ="json",name="success", params={"root","bookings"})
-		}) 
+		})
 	})
 	public String findAllBookingsByStartDateAndLengthOfStay(){
-		
+
 		if (this.getStart() != null && this.getStart().length() > 1) {
 			Date startDateBookings = new Date(Long.parseLong(this.getStart()) * 1000);
 			logger.info("**** data inizio2 ***" + startDateBookings);
@@ -614,8 +615,8 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 			return SUCCESS;
 		}
 		return ERROR;
-	
-	}	
+
+	}
 
 	@Actions({
 		@Action(value="/checkBookingDates",results = {
@@ -625,33 +626,33 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		})
 	})
 	public String checkBookingDates(){
-		
+
 		if(!this.checkBookingDates(this.getIdStructure())){
 			return ERROR;
 		}
 		return SUCCESS;
-				
+
 	}
-	
+
 	@Actions({
 		@Action(value="/checkBookingDatesNotNull",results = {
 				@Result(type ="json",name="success", params={"root","message"}),
-				@Result(name="input", location="/WEB-INF/jsp/validationError.jsp"),				
+				@Result(name="input", location="/WEB-INF/jsp/validationError.jsp"),
 				@Result(type ="json",name="error", params={"root","message"})
 		})
 	})
 	public String checkBookingDatesNotNull(){
-		
+
 		if(!this.checkBookingDatesNotNull(this.getIdStructure())){
 			return ERROR;
 		}
 		return SUCCESS;
 	}
-	
+
 	private Boolean checkBookingDates(Integer id_structure) {
 		List<Date> bookingDates = null;
 		Season season = null;
-		
+
 		if(this.getBooking().getDateIn()!=null && this.getBooking().getDateOut()!=null){
 			if(!this.getBooking().checkDates()){
 				this.getMessage().setResult(Message.ERROR);
@@ -662,7 +663,7 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				this.getMessage().setResult(Message.ERROR);
 				this.getMessage().setDescription(getText("bookingOverlappedAction"));
 				return false;
-			}	
+			}
 			bookingDates = this.getBooking().calculateBookingDates();
 			for(Date aBookingDate: bookingDates){
 				season = this.getSeasonService().findSeasonByDate(id_structure,aBookingDate );
@@ -673,16 +674,16 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				}
 			}
 		}
-	
+
 		this.getMessage().setDescription(getText("bookingDatesOK"));
 		this.getMessage().setResult(Message.SUCCESS);
 		return true;
 	}
-	
+
 	private Boolean checkBookingDatesNotNull(Integer id_structure) {
 		List<Date> bookingDates = null;
 		Season season = null;
-		
+
 		if(this.getBooking().getDateIn()!=null && this.getBooking().getDateOut()!=null){
 			if(!this.getBooking().checkDates()){
 				this.getMessage().setResult(Message.ERROR);
@@ -713,13 +714,13 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		this.getMessage().setResult(Message.SUCCESS);
 		return true;
 	}
-	
+
 	private Boolean checkBookingChecking(){
-		
+
 		Date dateOut = this.getBooking().getDateOut();
 		String status = this.getBooking().getStatus();
 		if(status!=null && status.equals("checkedout") && dateOut!=null){
-			
+
 			if (DateUtils.truncatedCompareTo(Calendar.getInstance().getTime(), dateOut,Calendar.DAY_OF_MONTH) < 0)
 			{
 				this.getMessage().setResult(Message.ERROR);
@@ -729,31 +730,31 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		}
 		return true;
 	}
-	
+
 	private void filterAdjustments(){
 		List<Adjustment> adjustmentsWithoutNulls = null;
-		
+
 		adjustmentsWithoutNulls = new ArrayList<Adjustment>();
 		for(Adjustment each: this.getBooking().getAdjustments()){
 			if(each!=null){
 				adjustmentsWithoutNulls.add(each);
-			}			
+			}
 		}
-		this.getBooking().setAdjustments(adjustmentsWithoutNulls);		
+		this.getBooking().setAdjustments(adjustmentsWithoutNulls);
 	}
-	
+
 	private void filterPayments(){
 		List<Payment> paymentsWithoutNulls = null;
-		
+
 		paymentsWithoutNulls = new ArrayList<Payment>();
 		for(Payment each: this.getBooking().getPayments()){
 			if(each!=null){
 				paymentsWithoutNulls.add(each);
-			}			
+			}
 		}
-		this.getBooking().setPayments(paymentsWithoutNulls);		
+		this.getBooking().setPayments(paymentsWithoutNulls);
 	}
-	
+
 	@Actions({
 		@Action(value="/deleteBooking",results = {
 				@Result(type ="json",name="success", params={"root","message"}),
@@ -762,7 +763,7 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 	})
 	public String deleteBooking() {
 		Integer count = 0;
-		
+
 		// check groupleader
 		GroupLeader groupLeader = null;
 		Housed housed = null;
@@ -774,7 +775,7 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		String  groupLeadersPresenceMessage = "";
 		List<GroupLeader> groupLeaders = null;
 
-		
+
 		groupLeader = this.getGroupLeaderService().findGroupLeaderByIdBooking(this.getBooking().getId());
 		logger.info("**** bookingaction, found a groupleader " + groupLeader);
 		if(groupLeader != null){
@@ -794,7 +795,7 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 				this.getMessage().setDescription(getText("bookingDeleteWithGroupLeaderNotHousedErrorAction"));
 				return "error";
 			}
-			//scan all bookings found	
+			//scan all bookings found
 				for(Booking each: bookings){
 
 					if(!each.getId().equals(this.getBooking().getId())){
@@ -802,7 +803,7 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 						groupLeaderinBookingPresence = true;
 					}
 				}
-				logger.info("**** bookingaction, bookpresence = " +groupLeaderinBookingPresence);	
+				logger.info("**** bookingaction, bookpresence = " +groupLeaderinBookingPresence);
 			if(groupLeaderinBookingPresence == true){
 				this.getMessage().setResult(Message.ERROR);
 				this.getMessage().setDescription(getText("bookingDeleteWithGroupLeaderErrorAction") + groupLeaderinBookingPresenceMessage);
@@ -811,17 +812,17 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 
 			}
 
-			
+
 		}
-		
+
 		// check for groupLeader in each housed
 		housedInBooking = this.getHousedService().findHousedByIdBooking(this.getBooking().getId());
 		for(Housed each: housedInBooking){
 
 			groupLeaders = this.getGroupLeaderService().findByIdHoused(each.getId());
-			
+
 	    	if (groupLeaders.size() > 0) {
-				logger.info("**** bookingaction, found groupleaders size = " + groupLeaders.size());	
+				logger.info("**** bookingaction, found groupleaders size = " + groupLeaders.size());
 
 	    		Booking bookingGroupLeader = null;
 	    		groupLeadersPresence = true;
@@ -829,19 +830,19 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 	    		for(GroupLeader aGroupLeader: groupLeaders){
 	    			bookingGroupLeader = this.getBookingService().findBookingById(aGroupLeader.getId_booking());
 	    			groupLeadersPresenceMessage+=  "\n***(room: " + bookingGroupLeader.getRoom().getName() + " " + bookingGroupLeader.getDateIn() + " - " + bookingGroupLeader.getDateOut() +")" ;
-	    			
+
 	    		}
 	    	}
-			
-	
+
+
 		}
-		
+
 		if(groupLeadersPresence == true){
 			this.getMessage().setResult(Message.ERROR);
 			this.getMessage().setDescription(getText("bookingDeleteWithGroupLeaderErrorAction") + groupLeadersPresenceMessage);
 			return "error";
 		}
-		
+
 		count = this.getBookingService().deleteBooking(this.getBooking().getId());
 		if(count > 0 ){
 			this.getMessage().setResult(Message.SUCCESS);
@@ -851,22 +852,22 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 			this.getMessage().setResult(Message.ERROR);
 			this.getMessage().setDescription(getText("bookingDeleteErrorAction"));
 			return "error";
-		}		
-	}	
-	
+		}
+	}
+
 	@Actions({
 		@Action(value="/goOnlineBookings",results = {
 				@Result(name="success",location="/WEB-INF/jsp/onlineBookings.jsp")
-		}) 	
+		})
 	})
 	public String goOnlineBookings(){
-		return SUCCESS;		
+		return SUCCESS;
 	}
-	
+
 	private void updateListNumGuests(Booking booking){
 		List<Integer> listNumGuests = null;
 		Integer maxGuests = 0;
-		
+
 		listNumGuests = new ArrayList<Integer>();
 		maxGuests = booking.getRoom().getRoomType().getMaxGuests();
 		for (Integer i= 1; i<= maxGuests; i++) {
@@ -874,7 +875,7 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 		}
 		this.setListNumGuests(listNumGuests);
 	}
-	
+
 	public Message getMessage() {
 		return message;
 	}
@@ -1046,5 +1047,5 @@ public class BookingAction extends ActionSupport implements SessionAware,UserAwa
 	public void setStart(String start) {
 		this.start = start;
 	}
-		
+
 }

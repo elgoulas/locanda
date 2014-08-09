@@ -7,7 +7,7 @@
 
 	<properties>
 		<resource.folder>${project.build.directory}/${project.name}_resources</resource.folder>
-		<db.folder>/opt/h2/databases</db.folder>
+		<db.folder>${project.build.directory}/${project.name}_resources/h2</db.folder>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -456,7 +456,7 @@
 		<name>Sardegna Ricerche</name>
 		<url>http://www.sardegnaricerche.it</url>
 	</organization>
-	<name>Locanda</name>
+	<name>locanda</name>
 	<url>http://locanda.sourceforge.net/</url>
 	<description>Locanda is an innovative booking management system designed for any touristical structure such as hotels, bed and breakfasts, guesthouses, farmhouses. Featuring a user-friendly and dynamic web interface, Locanda allows a seamless management of all the resources an owner has to control: Bookings, Rooms, Room Types, Guests, Extras, Price Lists, Seasons, Conventions. It is a system developed by the Open Source Lab c/o Sardegna Ricerche, Sardinia, Italy.</description>
 	<inceptionYear>Booking management system for hotels, bed&amp;breakfasts, guesthouses</inceptionYear>

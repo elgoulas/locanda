@@ -19,60 +19,60 @@ In case of controversy the competent court is the Court of Cagliari (Italy).
 
 <mapper namespace="persistence.mybatis.mappers.BookingMapper">
     <cache/>
-    
+
     <select id="findBookingById" resultType="model.Booking" parameterType="int">
         <include refid="selectBooking"/>where id = #{id}
     </select>
-    
+
     <select id="findBookingIdsByIdStructure" resultType="int" parameterType="int">
         select id from booking  where id_structure = #{id_structure}
     </select>
-    
+
     <select id="findBookingIdsByIdBooker" resultType="int" parameterType="int">
         select id_booking from booker where id_guest = #{id_booker}
     </select>
-    
+
     <select id="findBookingIdsByIdHousedGroupLeader" resultType="int" parameterType="int">
         select id_booking from groupLeader where id_housed = #{id_housed}
     </select>
-    
+
     <sql id="selectBooking">
         select id,nrGuests,dateIn,dateOut,roomSubtotal,extraSubtotal,notes,status,id_convention,id_room,id_structure from booking
     </sql>
-    
+
     <select id="countBookingsByIdConvention" parameterType="int" resultType="int">
         select count(id) from booking where id_convention = #{id_convention}
     </select>
-    
+
     <select id="countBookingsByIdRoom" parameterType="int" resultType="int">
         select count(id) from booking where id_room = #{id_room}
     </select>
-    
+
     <select id="countBookingsByIdExtra" parameterType="int" resultType="int">
         select count(id) from extraItem where id_extra = #{id_extra}
     </select>
-    
+
     <select id="countBookingsByIdGuest" parameterType="int" resultType="int">
         select count(id) from booker where id_guest = #{id_guest}
     </select>
-  
+
    <select id="countBookingsByIdGuestAsHoused" parameterType="int" resultType="int">
         select count(id) from housed where id_guest = #{id_guest}
-    </select> 
-     
+    </select>
+
     <insert id="insertBooking" parameterType="model.Booking" useGeneratedKeys="true" keyProperty="id">
         insert into booking(nrGuests,dateIn,dateOut,roomSubtotal,extraSubtotal,notes,status,id_convention,id_room,id_structure)
-        values(#{nrGuests},#{dateIn},#{dateOut},#{roomSubtotal},#{extraSubtotal},#{notes},#{status},#{id_convention},#{id_room},#{id_structure})
+        values(#{nrGuests},#{dateIn},#{dateOut},#{roomSubtotal},#{extraSubtotal},#{notes},#{receipt},#{status},#{id_convention},#{id_room},#{id_structure})
     </insert>
-    
+
     <update id="updateBooking" parameterType="model.Booking">
         update booking set nrGuests = #{nrGuests},dateIn = #{dateIn},dateOut = #{dateOut},roomSubtotal = #{roomSubtotal},extraSubtotal = #{extraSubtotal},
-        notes = #{notes},status = #{status},id_convention = #{id_convention},id_room = #{id_room},id_structure = #{id_structure}
+        notes = #{notes},receipt = #{receipt},status = #{status},id_convention = #{id_convention},id_room = #{id_room},id_structure = #{id_structure}
         where id = #{id}
     </update>
-    
+
     <delete id="deleteBooking" parameterType="int">
         delete from booking where id = #{id}
     </delete>
-    
+
 </mapper>

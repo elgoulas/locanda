@@ -49,14 +49,14 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
                				 <label for="sel_rooms_list"><s:text name="room" /> <sup title="<s:text name="thisFileMandatory" />.">*</sup> </label>
                 			 <select size="1" id="sel_rooms_list" class="required number" name="booking.room.id">
                   			 <s:iterator value="rooms" var="eachRoom" >
-                   			   <option 
-                   			   <s:if test="#eachRoom.id == booking.room.id">selected="selected"</s:if> 
+                   			   <option
+                   			   <s:if test="#eachRoom.id == booking.room.id">selected="selected"</s:if>
                    			   value="<s:property value="#eachRoom.id"/>"><s:property value="#eachRoom.name"/>
                    			   </option>
                     		</s:iterator>
                     		<s:if test="booking.room == null">
 							  <option selected="selected" value=""><s:text name="selectOne"/></option>
-							</s:if>	
+							</s:if>
                     		</select>
             				</div>
             				</div>
@@ -142,7 +142,7 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
 							</div>
 							</div>
 							<div class="c20l">
-                             
+
                              <div class="subcl type-select">
                              <!--
                              <label for="confirm"><s:text name="status" /></label>
@@ -163,7 +163,7 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
 							        required="true"/>
                                     </div>
                              </div>
-                 </fieldset>         
+                 </fieldset>
               </div>
               <div class="subcolumns_oldgecko">
                <div class="c50l">
@@ -171,7 +171,7 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
     <legend><s:text name="bookingDetails" />:</legend>
                 <input type="hidden" name="booking.booker.id" value="<s:property value="booking.booker.id"/>"/>
                 <jsp:include page="../templates/housed.mustache.jsp"/>
-                
+
                 <s:if test="booking.id != null">
                 	<div id="accordion">
                 		<h2><a href="#top_accordion"><s:text name="bookerDetails" /></a></h2>
@@ -188,7 +188,7 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
 							        size="1"
 							        required="true"
 							        id="nr_guests"/>
-							        
+
 			    	</div>
                 	<div id="selecthouseds-list"></div>
 		        	<script>
@@ -220,40 +220,41 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
 							        size="1"
 							        required="true"
 							        id="nr_guests"/>
-							        
+
 		        	</div>
                 </s:else>
-                
-	            
-              	
-                
-                	
-               			
-                  <div class="type-text"><hr/></div>	
+
+
+
+
+
+
+                  <div class="type-text"><hr/></div>
                     <div id="accordion2">
-                		<h2><a href="#top_accordion">Extras</a></h2>  
+                		<h2><a href="#top_accordion">Extras</a></h2>
                   <div class="type-select extraCheckList"><label for="">Extras:</label>
-                      	<jsp:include page="extraQuantity_select.jsp" />     	  
+                      	<jsp:include page="extraQuantity_select.jsp" />
                   </div>
                   </div>
                   <div class="type-select">
-                  	<label for="convention"><s:text name="convention" />: </label> 
+                  	<label for="convention"><s:text name="convention" />: </label>
                     <select name="booking.convention.id" id="convention" class="required">
                     <s:iterator value="conventions" var="eachConvention">
-                   	  <option 
-                   	  	<s:if test="#eachConvention.id == booking.convention.id">selected="selected"</s:if> 
+                   	  <option
+                   	  	<s:if test="#eachConvention.id == booking.convention.id">selected="selected"</s:if>
                    		value="<s:property value="#eachConvention.id"/>"><s:property value="#eachConvention.name"/>
                    	  </option>
                    	</s:iterator>
                    	</select>
                   </div>
                   <div id="accordion3">
-                		<h2><a href="#top_accordion"><s:text name="notes"></s:text></a></h2>  
+                		<h2><a href="#top_accordion"><s:text name="notes"></s:text></a></h2>
 	                  <div class="type-select"><label for=""><s:text name="notes" />:</label>
-	                      	<textarea rows="5" cols="5" name="booking.notes"><s:property value="booking.notes"/></textarea>     	  
+	                      	<textarea rows="5" cols="5" name="booking.notes"><s:property value="booking.notes"/></textarea>
+                          <textarea rows="1" cols="5" name="booking.receipt"><s:property value="booking.receipt"/></textarea>
 	                  </div>
                   </div>
-                           
+
                 </fieldset>
                 </div>
                 <div class="c5l">
@@ -281,7 +282,7 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
                   	  	</div>
                   	  	<div class="c25r"><label>&nbsp;</label><a href="#" class="erase_adjustment" title="erase"><img src="images/delete.png" alt="Delete Adjustment" /><s:text name="deleteAdjustment" /></a></div>
                   	  </div>
-              		</s:iterator> 
+              		</s:iterator>
                  	<div class="type-text">
                  	  <span><s:text name="subtotal" />: </span><div class="c33r"><span class="subtotal_room" ><s:property value="%{ booking.roomSubtotal + booking.extraSubtotal + adjustmentsSubtotal}"/>
                  	  </span> &euro;<!-- <input type="hidden" id="subtotal_room" name="booking.subtotal" value="<s:property value="%{ booking.roomSubtotal + booking.extraSubtotal + adjustmentsSubtotal}"/>" /> --></div>
@@ -293,12 +294,12 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
               				<a name="payment_anchor"></a>
               			</div>
               		</div>
-              		
-              		
-              		
-              		
-              		
-              		
+
+
+
+
+
+
               		<s:iterator value="booking.payments" var="eachPayment" status="paymentStatus">
               		     <div  class="subcolumns payment_row">
               		     <input type="hidden" class="idPayment" name="booking.payments[<s:property value="#paymentStatus.index"/>].id" value="<s:property value="#eachPayment.id"/>"/>
@@ -308,28 +309,28 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
               			</div>
                   	  </div>
               		</s:iterator><!--
-              		<s:if test="booking.payments.size() == 0"> 
+              		<s:if test="booking.payments.size() == 0">
               	         <div  class="subcolumns payment_row">
                   	     <div class="c40l"><div class="subcl type-text"><span>Name:</span><input type="text" name="booking.payments[0].description" class="require" style="width: 90%;" /></div></div>
                   	  	<div class="c33l"><div class="subcl type-text"><span>Amount(&euro;):</span><input type="text" name="booking.payments[0].amount"  class="extra_value_payment required"/></div></div>
                   	  	 <div class="c25r"><label>&nbsp;</label><a href="#bottom_anchor_payment" class="erase_payment" title="erase"><img src="images/delete.png" alt="Delete Payment" />Delete Payment</a>
               			</div>
-                  	  </div>	
+                  	  </div>
               		</s:if>
-              		--><a name="bottom_anchor_payment"></a> 
+              		--><a name="bottom_anchor_payment"></a>
               		<div class="type-text">
               			<span><s:text name="balanceDue" />: </span>
               			<div class="c33r"><span class="balance_room" ><s:property value="%{ booking.roomSubtotal + booking.extraSubtotal + adjustmentsSubtotal - paymentsSubtotal}"/></span> &euro;<input type="hidden" id="balance_room" value="<s:property value="%{ booking.roomSubtotal + booking.extraSubtotal - paymentsSubtotal}"/>" /></div></div>
-                  
-              		
-              		
+
+
+
                       <!--<div class="c50r">
                       	<div class="c10r">&euro;</div>
                       	<div class="c40l"><input type="text" name="pay_adjustment[]" id="pay_adjustment" /></div>
                       	<div class="c40r"><input type="text" name="pay_value_adjustment[]"  id="pay_value_adjustment" class="pay_value_adjustment digits"/></div>
                       </div>
                     <div class="type-text"><span>Balance Due: </span><div class="c33r"><span class="balance_room" ><s:property value="%{ booking.roomSubtotal + booking.extraSubtotal}"/></span> &euro;<input type="hidden" id="balance_room" value="<s:property value="%{ booking.roomSubtotal + booking.extraSubtotal}"/>" /></div></div>
-                  
+
                   -->
                   <div id="accordion4">
                 		<h2><a href="#top_accordion"><s:text name="creditCard"></s:text></a></h2>
@@ -346,14 +347,14 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
                  		<option value="visa">Visa</option>
                  		<option value="mastercard">Master Card</option>
                  		<option value="amex">American Express</option>
-                 	    <option value="discover">Discover</option>	
+                 	    <option value="discover">Discover</option>
 	              		</select></div></div>
-                  	  	<div class="c60l"><div class="subcl type-text"><span><s:text name="creditCardNumber" /></span><input type="text" name="booking.creditCard.cardNumber"  value="<s:property value="booking.creditCard.cardNumber" />" class="digits"/></div></div>            	  	 
+                  	  	<div class="c60l"><div class="subcl type-text"><span><s:text name="creditCardNumber" /></span><input type="text" name="booking.creditCard.cardNumber"  value="<s:property value="booking.creditCard.cardNumber" />" class="digits"/></div></div>
                  	  </div>
                  	  <div class="subcolumns">
                  	  	<strong><s:text name="creditCardExpirationDate"></s:text></strong>
                  	  </div>
-                 	  <div  class="subcolumns"> 	
+                 	  <div  class="subcolumns">
                  		<div class="c40l"><div class="subcl type-select" style="border-top:1px solid grey;"><span><s:text name="month" />:</span><select name="booking.creditCard.expMonth" value="<s:property value="booking.creditCard.expMonth" />" class="digits">
                  		<s:if test="booking.creditCard.id != null">
                  		<option selected="selected" value="<s:property value="booking.creditCard.expMonth"/>"><s:property value="booking.creditCard.expMonth"/></option>
@@ -371,12 +372,12 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
                  		<option value="11">11</option>
                  		<option value="12">12</option>
                  		</select></div></div>
-                  	  	<div class="c25l"><div class="subcl type-select"  style="border-top:1px solid grey;"><span><s:text name="year" />:</span><input type="text" name="booking.creditCard.expYear"  value="<s:property value="booking.creditCard.expYear" />" class="validPricePositive" min="" max=""/></div></div>            	  	 
-                 	    <div class="c33l"><!--<div class="subcl type-text"><span><s:text name="creditCardSecurityCode" /></span><input type="text" name="booking.creditCard.securityCode"  value="<s:property value="booking.creditCard.securityCode" />" class="digits" minlength="3" maxlength="3" /></div>--></div>            	  	 
+                  	  	<div class="c25l"><div class="subcl type-select"  style="border-top:1px solid grey;"><span><s:text name="year" />:</span><input type="text" name="booking.creditCard.expYear"  value="<s:property value="booking.creditCard.expYear" />" class="validPricePositive" min="" max=""/></div></div>
+                 	    <div class="c33l"><!--<div class="subcl type-text"><span><s:text name="creditCardSecurityCode" /></span><input type="text" name="booking.creditCard.securityCode"  value="<s:property value="booking.creditCard.securityCode" />" class="digits" minlength="3" maxlength="3" /></div>--></div>
                  	  </div>
-                 	  <div  class="subcolumns"> 	
+                 	  <div  class="subcolumns">
                  		<div class="c50l"><div class="subcl type-text"><span><s:text name="firstName" />:</span><input type="text" name="booking.creditCard.firstName" value="<s:property value="booking.creditCard.firstName" />"  /></div></div>
-                  	  	<div class="c50l"><div class="subcl type-text"><span><s:text name="lastName" /></span><input type="text" name="booking.creditCard.lastName"  value="<s:property value="booking.creditCard.lastName" />" /></div></div>            	  	 
+                  	  	<div class="c50l"><div class="subcl type-text"><span><s:text name="lastName" /></span><input type="text" name="booking.creditCard.lastName"  value="<s:property value="booking.creditCard.lastName" />" /></div></div>
                  	  </div>
                  	 </div>
                   </div>
@@ -391,29 +392,29 @@ String cardTypeSelected = (String) request.getAttribute("booking.creditCard.card
                 </div>
               </div>
             </form>
-           
+
                     <div  class="subcolumns adjustment_row" id="to_add_adjustment" style="display: none;">
                   	     <div class="c40l"><div class="subcl type-text"><span><s:text name="name" />:</span><input type="text" name="booking.adjustments[__PVALUE__].description" class="required" style="width: 90%;" /></div></div>
                   	  	<div class="c33l"><div class="subcl type-text"><span><s:text name="amount" />(&euro;):</span><input type="text" name="booking.adjustments[__PVALUE__].amount"  class="extra_value_adjustment required validPrice"/></div></div>
                   	  	 <div class="c25r"><label>&nbsp;</label><a href="#bottom_anchor" class="erase_adjustment" title="erase"><img src="images/delete.png" alt="Delete Adjustment" /><s:text name="deleteAdjustment" /></a>
               			</div>
                   	  </div>
-                  	  
+
                   	  <div  class="subcolumns payment_row" id="to_add_payment" style="display: none;" >
                   	     <div class="c40l"><div class="subcl type-text"><span><s:text name="name" />:</span><input type="text" name="booking.payments[__PVALUE__].description" class="required" style="width: 90%;" /></div></div>
                   	  	<div class="c33l"><div class="subcl type-text"><span><s:text name="amount" />(&euro;):</span><input type="text" name="booking.payments[__PVALUE__].amount"  class="extra_value_payment required validPricePositive"/></div></div>
                   	  	 <div class="c25r"><label>&nbsp;</label><a href="#bottom_anchor_payment" class="erase_payment" title="erase"><img src="images/delete.png" alt="Delete Payment" /><s:text name="deleteAdjustment" /></a>
               			</div>
                   	  </div>
-                  	  
+
                   	  <div  class="subcolumns guest_row" id="to_add_guest" style="display: none;">
               		  <div class="c25l"><div class="subcl type-text"><span><s:text name="firstName" />:</span><input type="text" name="booking.guests[__PVALUE__].firstName" value="" class="required" /></div></div>
                   	  	<div class="c25l"><div class="subcl type-text"><span><s:text name="lastName" />:</span><input type="text" name="booking.guests[__PVALUE__].lastName"  value="" class="required" style="width: 90%;"/></div></div>
-                  	  	<div class="c33l"><div class="subcl type-text"><span><s:text name="idNumber" />:</span><input type="text" name="booking.guests[__PVALUE__].idNumber" value="" class="required" /></div></div> 
+                  	  	<div class="c33l"><div class="subcl type-text"><span><s:text name="idNumber" />:</span><input type="text" name="booking.guests[__PVALUE__].idNumber" value="" class="required" /></div></div>
                   	  	 <div class="c10r"><label>&nbsp;</label><a href="#" class="erase_guest" title="erase"><img src="images/delete.png" alt="Delete Guest" /><s:text name="deleteGuest" /></a>
               			</div>
                   	  </div>
-                  	  
+
 <s:if test="booking.id == null">
 	<script>
 		var readyStateCheckInterval = setInterval(function() {
