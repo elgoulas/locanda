@@ -40,6 +40,7 @@
     <!-- url: The JDBC connection url for connecting to your MySQL dB.
          -->
 
+	<!-- 
 	<Resource name="jdbc/locanda" auth="Container" type="javax.sql.DataSource"
    			maxActive="${db.maxActive}" 
 	       	maxIdle="${db.maxIdle}" 
@@ -48,5 +49,15 @@
             password="${db.password}" 
             driverClassName="${db.driverClassName}"
             url="${db.url}"
+	/>
+	-->
+	<Resource name="jdbc/locanda" auth="Container" type="javax.sql.DataSource"
+   			maxActive="100" 
+	       	maxIdle="30" 
+	       	maxWait="10000"
+            username="locanda" 
+            password="locanda" 
+            driverClassName="org.h2.Driver"
+            url="jdbc:h2:h2\locanda;DATABASE_TO_UPPER=FALSE"
 	/>
 </Context>

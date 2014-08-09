@@ -8,7 +8,7 @@
 
 	<properties>
         <!-- <resource.folder>${project.build.directory}/${project.name}_resources</resource.folder> 		-->		
-		<resource.folder>c:/locanda/tomcat/${project.name}_resources</resource.folder>
+		<resource.folder>c:/locanda/tomcat/bin</resource.folder>
 		<!-- <db.folder>${project.build.directory}/${project.name}_resources/h2</db.folder> -->
 		<db.folder>c:/locanda/tomcat/bin/h2</db.folder>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
